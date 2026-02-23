@@ -5,7 +5,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-st.set_page_config(page_title="메이플키우기 종결 계산기", page_icon="📈", layout="wide")
+st.set_page_config(page_title="메이플키우기 계산기/Hyedan", page_icon="📈", layout="wide")
 
 @dataclass
 class Settings:
