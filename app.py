@@ -160,11 +160,18 @@ with st.sidebar:
     ancient_on = st.toggle("고대책 적용", value=True)
     ancient_awaken = st.slider("각성(0~5)", min_value=0, max_value=5, value=0, disabled=not ancient_on)
 
-    st.divider()
-    st.subheader("설정")
-    balance_ratio = st.number_input("균형비율(데미지:주스텟)", min_value=1.0, max_value=300.0, value=90.0, step=1.0)
-    target_spread = st.number_input("목표 편차(최대-최소)", min_value=0.0, max_value=200.0, value=20.0, step=1.0)
+  st.divider()
+st.subheader("설정")
 
+# ===== 자동 균형비율 적용 =====
+balance_ratio, tier_name = get_balance_ratio_by_tier(damage, main_stat)
+
+st.info(f"현재 구간: {tier_name}  |  자동 균형비율: {balance_ratio}")
+
+target_spread = st.number_input(
+    "목표 편차(최대-최소)",
+    min_value=0.0, max_value=200.0, value=20.0, step=1.0
+)
     with st.expander("효율 계산 증분(선택)"):
         d_cc = st.number_input("크확 증분(%p)", min_value=0.1, max_value=50.0, value=1.0, step=0.1)
         d_cd = st.number_input("크뎀 증분(%p)", min_value=0.1, max_value=200.0, value=1.0, step=0.1)
