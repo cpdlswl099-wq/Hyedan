@@ -32,6 +32,15 @@ class Stats:
     ancient_awaken: int
 
 ANCIENT_COEF = {0:0.30, 1:0.36, 2:0.42, 3:0.48, 4:0.54, 5:0.60}
+# ===== 균형비율 자동 판정 (AND 방식) =====
+def get_balance_ratio_by_tier(damage: float, stat: float):
+    if damage >= 600 and stat >= 50000:
+        return 95, "최종"
+    if damage >= 400 and stat >= 35000:
+        return 90, "고스펙"
+    if damage >= 250 and stat >= 20000:
+        return 85, "중스펙"
+    return 75, "저스펙"
 
 def clamp(x, lo, hi):
     return max(lo, min(hi, x))
