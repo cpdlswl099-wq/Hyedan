@@ -32,16 +32,51 @@ class Stats:
     ancient_awaken: int
 
 ANCIENT_COEF = {0:0.30, 1:0.36, 2:0.42, 3:0.48, 4:0.54, 5:0.60}
-# ===== 균형비율 자동 판정 (AND 방식) =====
-def get_balance_ratio_by_tier(damage: float, stat: float):
+# ===== 구간 판정 + 균형비율(AND 방식) =====
+def get_tier_info(damage: float, stat: float):
+    """
+    AND 방식: 데미지/주스텟이 '둘 다' 만족해야 상위 구간
+    반환: (tier_key, tier_name, balance_ratio, color_style)
+    """
     if damage >= 600 and stat >= 50000:
-        return 95, "최종"
+        return ("final", "최종", 95, "purple")
     if damage >= 400 and stat >= 35000:
-        return 90, "고스펙"
+        return ("high", "고스펙", 90, "blue")
     if damage >= 250 and stat >= 20000:
-        return 85, "중스펙"
-    return 75, "저스펙"
+        return ("mid", "중스펙", 85, "green")
+    return ("low", "저스펙", 75, "orange")
 
+
+# ===== 종결(최종)까지 남은 데미지/주스텟 계산 =====
+def remaining_to_final(damage: float, stat: float):
+    need_damage = max(0.0, 600.0 - damage)
+    need_stat = max(0.0, 50000.0 - stat)
+    return need_damage, need_stat
+
+
+# ===== 구간별 색상 배지 HTML =====
+def tier_badge_html(tier_name: str, color_style: str):
+    style_map = {
+        "orange": ("#FFF3CD", "#856404"),  # 저스펙(노랑 계열)
+        "green":  ("#D4EDDA", "#155724"),  # 중스펙(초록)
+        "blue":   ("#D1ECF1", "#0C5460"),  # 고스펙(파랑)
+        "purple": ("#E2D6F7", "#3D246B"),  # 최종(보라)
+    }
+    bg, fg = style_map.get(color_style, ("#EEEEEE", "#333333"))
+    return f"""
+    <div style="
+        display:inline-block;
+        padding:6px 10px;
+        border-radius:999px;
+        background:{bg};
+        color:{fg};
+        font-weight:700;
+        font-size:14px;
+        line-height:1;
+        ">
+        현재 {tier_name} 구간입니다
+    </div>
+    """
 def clamp(x, lo, hi):
     return max(lo, min(hi, x))
 
