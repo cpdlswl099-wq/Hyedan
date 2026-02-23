@@ -133,7 +133,8 @@ def recommendation(s: Stats, stt: Settings):
         return f"주스텟 +{g['주스텟차이']:.0f} (데미지 대비 부족)"
     return "미세최적화(크뎀/최종뎀/최소) 단계"
 
-st.title("📈 메이플키우기 종결 계산기 (고대책 반영)")
+st.title("📈 메이플키우기 계산기")
+st.caption("Hyedan 69섭 테토클럽 전용")
 
 with st.sidebar:
     st.header("입력")
@@ -219,11 +220,6 @@ st.dataframe(gdf, use_container_width=True, hide_index=True)
 st.subheader("효율(증분 기준 딜 상승률 %)")
 edf = pd.DataFrame([{"항목": k, "효율(%)": v} for k, v in eff.items()]).sort_values("효율(%)", ascending=False)
 st.dataframe(edf, use_container_width=True, hide_index=True)
-
-fig = plt.figure()
-plt.bar(edf["항목"], edf["효율(%)"])
-plt.ylabel("딜 상승률(%)")
-st.pyplot(fig, clear_figure=True)
 
 with st.expander("계산 방식(요약)"):
     st.write("""
