@@ -197,13 +197,18 @@ with st.sidebar:
 
     st.divider()
     st.subheader("설정")
-    # ===== 자동 균형비율 적용 =====
-    balance_ratio, tier_name = get_balance_ratio_by_tier(damage, main_stat)
-    
-    st.info(f"현재 구간: {tier_name}  |  자동 균형비율: {balance_ratio}")
+
+    # 자동 구간 판정
+    tier_key, tier_name, balance_ratio, tier_color = get_tier_info(damage, main_stat)
+    need_damage, need_stat = remaining_to_final(damage, main_stat)
+
+    st.markdown(tier_badge_html(tier_name, tier_color), unsafe_allow_html=True)
+    st.caption(f"자동 균형비율: {balance_ratio}")
+    st.caption(f"종결까지 남은 수치 → 데미지 +{need_damage:.0f}%p / 주스텟 +{need_stat:,.0f}")
+
     target_spread = st.number_input(
-    "목표 편차(최대-최소)",
-    min_value=0.0, max_value=200.0, value=20.0, step=1.0
+       "목표 편차(최대-최소)",
+       min_value=0.0, max_value=200.0, value=20.0, step=1.0
     )
     
     with st.expander("효율 계산 증분(선택)"):
